@@ -14,6 +14,15 @@ import router from './router' // 引入router
 import '@/icons' // 引入图标
 import '@/permission' // 引入 权限控制
 
+import * as directives from '@/directives'
+
+// 注册自定义指令
+// 遍历所有的导出的指令对象 完成自定义全局注册
+Object.keys(directives).forEach(key => {
+  // 注册自定义指令
+  Vue.directive(key, directives[key])
+})
+
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale }) // 全局注册 ElementUI，并且 语言 采用英语
 
