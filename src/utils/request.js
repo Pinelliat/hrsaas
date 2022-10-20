@@ -1,14 +1,30 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
 import store from '@/store'
+import router from '@/router'
+// 定义超时时间
+const TimeOut = 3600
+
 const service = axios.create({
   baseURL: '/api',
   timeout: 5000
 })
+function isCheckTimeOut() {
+  const currentTime = Date.now()
+  const timeStamp = currentTime - store.getters.hrsaasTime
+  return timeStamp / 1000 > TimeOut
+}
 // 添加请求拦截器
 service.interceptors.request.use(function(config) {
   // 在发送请求之前做些什么
   if (store.getters.token) {
+    if (isCheckTimeOut()) {
+      store.dispatch('user/logout') // 登出操作
+      // 跳转到登录页
+      router.push('/login')
+      return Promise.reject(new Error('token超时了'))
+    }
+
     config.headers['Authorization'] = 'Bearer ' + store.getters.token
   }
   return config
