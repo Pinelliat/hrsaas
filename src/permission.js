@@ -11,8 +11,11 @@ import store from '@/store'
 
 const whiteList = ['/login', '/404']
 
-router.beforeEach(function(to, from, next) {
+router.beforeEach(async function(to, from, next) {
   if (store.getters.token) { // 处于登录状态
+    if (!store.getters.userId) {
+      await store.dispatch('user/getUserInfoAction')
+    }
     if (to.path === '/login') {
       next('/')
     } else {

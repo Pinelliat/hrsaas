@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
+import store from '@/store'
 const service = axios.create({
   baseURL: '/api',
   timeout: 5000
@@ -7,6 +8,9 @@ const service = axios.create({
 // 添加请求拦截器
 service.interceptors.request.use(function(config) {
   // 在发送请求之前做些什么
+  if (store.getters.token) {
+    config.headers['Authorization'] = 'Bearer ' + store.getters.token
+  }
   return config
 }, function(error) {
   // 对请求错误做些什么
