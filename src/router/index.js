@@ -1,5 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import employeesRouter from './modules/employees'
+import settingRouter from './modules/setting'
+import departmentsRouter from './modules/departments'
+
+const asyncRoutes = [employeesRouter, settingRouter, departmentsRouter]
 
 Vue.use(Router)
 
@@ -38,7 +43,7 @@ export const constantRoutes = [
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
+  routes: [...constantRoutes, ...asyncRoutes]
 })
 
 const router = createRouter()
